@@ -16,15 +16,7 @@ export const links = [
     title: "Prisma",
     url: "https://prisma.io",
   },
-  {
-    category: "Open Source",
-    description: "Utility-fist css framework",
-    id: "6a9122b2-363b-4a4f-ad26-d6c55b51baed",
-    imageUrl:
-      "https://tailwindcss.com/_next/static/media/twitter-large-card.85c0ff9e455da585949ff0aa50981857.jpg",
-    title: "TailwindCSS",
-    url: "https://tailwindcss.com",
-  },
+
   {
     category: "Open Source",
     description: "GraphQL implementation ",
