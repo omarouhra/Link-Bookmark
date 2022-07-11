@@ -6,4 +6,4 @@
 - NextAuth
 - PlanetScale
 
-:fire :rocket
+🚀🚀🚀
