@@ -25,4 +25,14 @@ export default NextAuth({
     verifyRequest: `/login`,
     error: "/login", // Error code passed in query string as ?error=
   },
+  callbacks: {
+    session: ({ session, user }) => ({
+      ...session,
+      user: {
+        ...session.user,
+        id: user.id,
+        username: user.username,
+      },
+    }),
+  },
 });
