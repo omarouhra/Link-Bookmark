@@ -2,11 +2,15 @@ import Head from "next/head";
 import { links } from "../data/links";
 import Link from "next/link";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const { data, status } = useSession();
+  const router = useRouter();
 
-  console.log(data);
+  if (status === "unauthenticated") {
+    router.push("/login");
+  }
   return (
     <div>
       <Head>
@@ -14,15 +18,12 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <div className='container mx-auto max-w-5xl my-20 min-h-[60vh]'>
-        <button onClick={() => signIn()}>signIn</button>
-
-        <p></p>
+      <div className='container mx-auto max-w-5xl my-20 flex items-center justify-center '>
         <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10'>
           {links.map(link => (
             <Link href={link.url} key={link.id}>
               <a>
-                <li className='shadow h-full   max-w-md  rounded-md hover:shadow-xl transition duration-500'>
+                <li className='shadow lg:h-full  max-w-md  rounded-md hover:shadow-xl transition duration-500'>
                   <img
                     className='shadow rounded-t-md h-1/2 w-full object-cover'
                     src={link.imageUrl}
@@ -31,17 +32,6 @@ export default function Home() {
                     <p className='text-sm text-blue-500'>{link.category}</p>
                     <p className='text-lg font-cal '>{link.title}</p>
                     <p className='text-gray-600'>{link.description}</p>
-                    <a className='flex hover:text-blue-500'>
-                      {link.url.replace(/(^\w+:|^)\/\//, "")}
-                      <svg
-                        className='w-4 h-4 my-1'
-                        fill='currentColor'
-                        viewBox='0 0 20 20'
-                        xmlns='http://www.w3.org/2000/svg'>
-                        <path d='M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z'></path>
-                        <path d='M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z'></path>
-                      </svg>
-                    </a>
                   </div>
                 </li>
               </a>
