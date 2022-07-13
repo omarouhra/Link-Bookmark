@@ -12,6 +12,8 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [links, setLinks] = useState([]);
 
+  console.log(userId);
+
   if (status === "unauthenticated") {
     router.push("/login");
   }
@@ -51,7 +53,6 @@ export default function Home() {
 
   useEffect(() => {
     getLinks();
-    console.log(links);
   }, []);
 
   return (

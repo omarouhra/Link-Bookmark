@@ -28,7 +28,6 @@ async function getLinks(
   if (!session.user.id) {
     return res.status(500).end("Server failed to get session user ID");
   }
-
   try {
     const links = await prisma.link.findMany({
       where: {
