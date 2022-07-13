@@ -47,7 +47,7 @@ const Header = () => {
               </div>
             </nav>
           )}
-          {user?.image ? (
+          {status === "authenticated" && user?.image ? (
             <img
               alt="profile"
               className="rounded-full w-12 h-12 ml-5"

@@ -82,5 +82,6 @@ model Link {
   description String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  users       User[]
+  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String?
 }
