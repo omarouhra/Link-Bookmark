@@ -13,7 +13,7 @@ export default function Home() {
   const [links, setLinks] = useState([]);
 
   console.log(userId);
-
+  console.log(links);
   if (status === "unauthenticated") {
     router.push("/login");
   }
@@ -59,48 +59,58 @@ export default function Home() {
     <div>
       <Head>
         <title>Links</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <div className="container mx-auto max-w-5xl my-20 flex items-center justify-center ">
+      <div className='container mx-auto max-w-5xl my-20 flex items-center justify-center '>
         {/* <button onClick={() => createLink()}>create links</button> */}
-        {links.length ? (
-          <div>
-            {status === "loading" ? (
-              <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                <div className="bg-gray-300 w-[300px] h-[300px] rounded-md animate-pulse"></div>
-                <div className="bg-gray-300 w-[300px] h-[300px] rounded-md animate-pulse"></div>
-                <div className="bg-gray-300 w-[300px] h-[300px] rounded-md animate-pulse"></div>
-              </ul>
-            ) : (
-              <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                {links?.map((link) => (
-                  <Link href={link.url} key={link.id}>
-                    <a>
-                      <li className="shadow lg:h-full  max-w-md  rounded-md hover:shadow-xl transition duration-500">
-                        <img
-                          className="shadow rounded-t-md h-1/2 w-full object-cover"
-                          src={link.imageUrl}
-                        />
-                        <div className="p-5 flex flex-col space-y-2">
-                          <p className="text-sm text-blue-500">
-                            {link.category}
-                          </p>
-                          <p className="text-lg font-cal ">{link.title}</p>
-                          <p className="text-gray-600">{link.description}</p>
-                        </div>
-                      </li>
-                    </a>
-                  </Link>
-                ))}
-              </ul>
-            )}
-          </div>
-        ) : (
-          <p className="font-cal text-2xl">
-            No links found! please create your first link 🚀
-          </p>
-        )}
+
+        <div>
+          {status === "loading" ? (
+            <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10'>
+              <div className='bg-gray-300 w-[300px] h-[300px] rounded-md animate-pulse'></div>
+              <div className='bg-gray-300 w-[300px] h-[300px] rounded-md animate-pulse'></div>
+              <div className='bg-gray-300 w-[300px] h-[300px] rounded-md animate-pulse'></div>
+            </ul>
+          ) : (
+            <div>
+              {links.length ? (
+                <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10'>
+                  {links?.map(link => (
+                    <Link href={link.url} key={link.id}>
+                      <a>
+                        <li className='shadow lg:h-full  max-w-md  rounded-md hover:shadow-xl transition duration-500'>
+                          <img
+                            className='shadow rounded-t-md h-1/2 w-full object-cover'
+                            src={link.imageUrl}
+                          />
+                          <div className='p-5 flex flex-col items-start space-y-2'>
+                            <p className='text-sm text-blue-500'>
+                              {link.category}
+                            </p>
+                            <p className='text-lg font-cal '>{link.title}</p>
+                            <p className='text-gray-600'>{link.description}</p>
+                            {userId === link.userId && (
+                              <img
+                                alt='profile'
+                                className='rounded-full w-6 h-6 ml-auto'
+                                src={data.user.image}
+                              />
+                            )}
+                          </div>
+                        </li>
+                      </a>
+                    </Link>
+                  ))}
+                </ul>
+              ) : (
+                <p className='font-cal text-2xl text-center w-full'>
+                  No links found! please create your first link 🚀
+                </p>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

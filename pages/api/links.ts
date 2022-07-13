@@ -1,14 +1,22 @@
 import { PrismaClient } from "@prisma/client";
 import type { Session } from "next-auth";
 import { NextApiRequest, NextApiResponse } from "next/dist/shared/lib/utils";
+import { useSession } from "next-auth/react";
+
+import { authOptions } from "./auth/[...nextauth]";
+import { unstable_getServerSession } from "next-auth/next";
 
 const prisma = new PrismaClient();
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
-  session: Session
+  res: NextApiResponse
 ) {
+  // const session = await getServerSession({ req, res }, authOptions);
+  // if (!session) return res.status(401).end();
+  // const { data: session } = useSession();
+  const session = await unstable_getServerSession(req, res, authOptions);
+
   if (req.method === "GET") {
     return await getLinks(req, res, session);
   } else if (req.method === "POST") {
@@ -31,7 +39,7 @@ async function getLinks(
   try {
     const links = await prisma.link.findMany({
       where: {
-        userId: session.user.id,
+        userId: session?.user?.id,
       },
     });
     return res.status(200).json(links);
