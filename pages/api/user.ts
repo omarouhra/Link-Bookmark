@@ -1,4 +1,3 @@
-import { PrismaClient } from "@prisma/client";
 import type { Session } from "next-auth";
 import { NextApiRequest, NextApiResponse } from "next/dist/shared/lib/utils";
 import { authOptions } from "./auth/[...nextauth]";

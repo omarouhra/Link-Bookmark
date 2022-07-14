@@ -74,40 +74,38 @@ export default function Home() {
             </ul>
           ) : (
             <div>
-              {links.length ? (
-                <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10'>
-                  {links?.map(link => (
-                    <Link href={link.url} key={link.id}>
-                      <a>
-                        <li className='shadow lg:h-full  max-w-md  rounded-md hover:shadow-xl transition duration-500'>
-                          <img
-                            className='shadow rounded-t-md h-1/2 w-full object-cover'
-                            src={link.imageUrl}
-                          />
-                          <div className='p-5 flex flex-col items-start space-y-2'>
-                            <p className='text-sm text-blue-500'>
-                              {link.category}
-                            </p>
-                            <p className='text-lg font-cal '>{link.title}</p>
-                            <p className='text-gray-600'>{link.description}</p>
-                            {userId === link.userId && (
-                              <img
-                                alt='profile'
-                                className='rounded-full w-6 h-6 ml-auto'
-                                src={data.user.image}
-                              />
-                            )}
-                          </div>
-                        </li>
-                      </a>
-                    </Link>
-                  ))}
-                </ul>
-              ) : (
-                <p className='font-cal text-2xl text-center w-full'>
+              <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10'>
+                {links?.map(link => (
+                  <Link href={link.url} key={link.id}>
+                    <a>
+                      <li className='shadow lg:h-full  max-w-md  rounded-md hover:shadow-xl transition duration-500'>
+                        <img
+                          className='shadow rounded-t-md min-h-[200px] w-full object-cover'
+                          src={link.imageUrl}
+                        />
+                        <div className='p-5 flex flex-col items-start space-y-2'>
+                          <p className='text-sm text-blue-500'>
+                            {link.category}
+                          </p>
+                          <p className='text-lg font-cal '>{link.title}</p>
+                          <p className='text-gray-600'>{link.description}</p>
+                          {userId === link.userId && (
+                            <img
+                              alt='profile'
+                              className='rounded-full w-6 h-6 ml-auto'
+                              src={data.user.image}
+                            />
+                          )}
+                        </div>
+                      </li>
+                    </a>
+                  </Link>
+                ))}
+              </ul>
+
+              {/* <p className='font-cal text-2xl text-center w-full'>
                   No links found! please create your first link 🚀
-                </p>
-              )}
+                </p> */}
             </div>
           )}
         </div>
