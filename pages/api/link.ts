@@ -3,8 +3,9 @@ import type { Session } from "next-auth";
 import { NextApiRequest, NextApiResponse } from "next/dist/shared/lib/utils";
 import { authOptions } from "./auth/[...nextauth]";
 import { unstable_getServerSession } from "next-auth/next";
+import prisma from "../../lib/prisma";
 
-const prisma = new PrismaClient();
+
 
 export default async function handler(
   req: NextApiRequest,

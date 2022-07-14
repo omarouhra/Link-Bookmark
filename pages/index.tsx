@@ -20,7 +20,7 @@ export default function Home() {
 
   const getLinks = async () => {
     try {
-      const response = await fetch("/api/user", {
+      const response = await fetch("/api/link", {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
