@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import Modal from "../components/Modal";
 
 export default function Home() {
   const { data, status } = useSession();
@@ -11,6 +12,7 @@ export default function Home() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [links, setLinks] = useState([]);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   console.log(userId);
   console.log(links);
@@ -39,7 +41,6 @@ export default function Home() {
         body: JSON.stringify({
           category: "Open Source",
           description: "Fullstack React framework",
-          id: "8a9020b2-363b-4a4f-ad26-d6d55b51bqes",
           imageUrl: "https://nextjs.org/static/twitter-cards/home.jpg",
           title: "Next.js",
           url: "https://nextjs.org",
@@ -62,8 +63,107 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <div className='container mx-auto max-w-5xl my-20 flex items-center justify-center '>
-        {/* <button onClick={() => createLink()}>create links</button> */}
+      <Modal showModal={showModal} setShowModal={setShowModal}>
+        <form
+          onSubmit={event => {
+            // event.preventDefault();
+            // setCreatingSite(true);
+            // createSite(event);
+          }}
+          className='inline-block w-full max-w-md pt-8 overflow-hidden text-center align-middle transition-all bg-white shadow-xl rounded-lg'>
+          <h2 className='font-cal text-2xl mb-6'>Create a New Link</h2>
+          <div className='grid gap-y-5 w-5/6 mx-auto'>
+            <div className='border border-gray-700 rounded-lg flex flex-start items-center'>
+              <span className='pl-5 pr-1'>📌</span>
+              <input
+                className='w-full px-5 py-3 text-gray-700 bg-white border-none focus:outline-none focus:ring-0 rounded-none rounded-r-lg placeholder-gray-400'
+                name='name'
+                required
+                placeholder='Site Name'
+                // ref={siteNameRef}
+                type='text'
+              />
+            </div>
+            <div className='border border-gray-700 rounded-lg flex flex-start items-center'>
+              <span className='pl-5 pr-1'>🪧</span>
+              <input
+                className='w-full px-5 py-3 text-gray-700 bg-white border-none focus:outline-none focus:ring-0 rounded-none rounded-r-lg placeholder-gray-400'
+                name='Url'
+                required
+                placeholder='Url'
+                // ref={siteNameRef}
+                type='url'
+              />
+            </div>
+            <div className='border border-gray-700 rounded-lg flex flex-start items-center'>
+              <span className='pl-5 pr-1'>🖼️</span>
+              <input
+                className='w-full px-5 py-3 text-gray-700 bg-white border-none focus:outline-none focus:ring-0 rounded-none rounded-r-lg placeholder-gray-400'
+                name='image'
+                required
+                placeholder='Image'
+                // ref={siteNameRef}
+                type='url'
+              />
+            </div>
+            <div className='border border-gray-700 rounded-lg flex flex-start items-center'>
+              <span className='pl-5 pr-1'>⭐</span>
+              <input
+                className='w-full px-5 py-3 text-gray-700 bg-white border-none focus:outline-none focus:ring-0 rounded-none rounded-r-lg placeholder-gray-400'
+                name='Category'
+                required
+                placeholder='Category'
+                // ref={siteNameRef}
+                type='text'
+              />
+            </div>
+            <div className='border border-gray-700 rounded-lg flex flex-start items-center'>
+              <span className='pl-5 pr-1'>🖊️</span>
+              <input
+                className='w-full px-5 py-3 text-gray-700 bg-white border-none focus:outline-none focus:ring-0 rounded-none rounded-r-lg placeholder-gray-400'
+                name='Description'
+                required
+                placeholder='Description'
+                // ref={siteNameRef}
+                type='text'
+              />
+            </div>
+
+            {/* {error && (
+              <p className='px-5 text-left text-red-500'>
+                <b>{error}</b> is not available. Please choose another
+                subdomain.
+              </p>
+            )} */}
+          </div>
+          <div className='flex justify-between items-center mt-10 w-full'>
+            <button
+              type='button'
+              className='w-full px-5 py-5 text-sm text-gray-600 hover:text-black border-t border-gray-300 rounded-bl focus:outline-none focus:ring-0 transition-all ease-in-out duration-150'
+              onClick={() => {
+                // setError(null);
+                setShowModal(false);
+              }}>
+              CANCEL
+            </button>
+
+            <button
+              type='submit'
+              // disabled={creatingSite || error !== null}
+              // onClick={() => router.push("/editor")}
+              className=' bg-white text-gray-600 hover:text-black w-full px-5 py-5 text-sm border-t border-l border-gray-300 rounded-br focus:outline-none focus:ring-0 transition-all ease-in-out duration-150'>
+              CREATE LINK
+            </button>
+          </div>
+        </form>
+      </Modal>
+
+      <div className='container mx-auto max-w-5xl my-20 flex flex-col items-start justify-center space-y-12 '>
+        <button
+          className=' bg-gray-100 text-black  hover:shadow-xl px-5 py-5 text-lg font-cal rounded-md transition-all ease-in-out duration-150'
+          onClick={() => setShowModal(true)}>
+          create links 🚀
+        </button>
 
         <div>
           {status === "loading" ? (
