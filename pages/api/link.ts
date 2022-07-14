@@ -1,8 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import type { Session } from "next-auth";
 import { NextApiRequest, NextApiResponse } from "next/dist/shared/lib/utils";
-import { useSession } from "next-auth/react";
-
 import { authOptions } from "./auth/[...nextauth]";
 import { unstable_getServerSession } from "next-auth/next";
 
@@ -12,9 +10,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  // const session = await getServerSession({ req, res }, authOptions);
-  // if (!session) return res.status(401).end();
-  // const { data: session } = useSession();
   const session = await unstable_getServerSession(req, res, authOptions);
 
   if (req.method === "GET") {
