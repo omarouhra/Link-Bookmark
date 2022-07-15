@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import Modal from "../components/Modal";
-import type { FormEvent } from "react";
+import useSWR from "swr";
 
 export default function Home() {
   const { data, status } = useSession();
@@ -12,7 +12,7 @@ export default function Home() {
   const userId = data?.user.id;
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [links, setLinks] = useState([]);
+  // const [links, setLinks] = useState([]);
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const linkTitle = useRef(null);
@@ -32,11 +32,16 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
       });
 
-      setLinks(await response.json());
+      if (response.ok) {
+        return await response.json();
+      }
     } catch (error) {
       console.log("there was an error submitting", error);
     }
   };
+
+  const { data: links, error } = useSWR(`/api/link`, getLinks);
+  if (error) return "An error has occured";
 
   const createLink = async event => {
     event.preventDefault();
@@ -61,10 +66,6 @@ export default function Home() {
       console.log("there was an error submitting", error);
     }
   };
-
-  useEffect(() => {
-    getLinks();
-  }, []);
 
   return (
     <div>
@@ -174,7 +175,7 @@ export default function Home() {
         </button>
 
         <div>
-          {status === "loading" ? (
+          {!links ? (
             <div>
               <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10'>
                 <div className='bg-gray-300 w-[300px] h-[350px] rounded-md animate-pulse flex items-center justify-center'>
@@ -219,11 +220,11 @@ export default function Home() {
                 ))}
               </ul>
 
-              {/* {links.length === 0 && (
+              {links.length === 0 && (
                 <p className='font-cal text-2xl text-center w-full'>
                   No links found! please create your first link 🚀
                 </p>
-              )} */}
+              )}
             </div>
           )}
         </div>
