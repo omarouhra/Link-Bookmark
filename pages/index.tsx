@@ -175,11 +175,19 @@ export default function Home() {
 
         <div>
           {status === "loading" ? (
-            <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10'>
-              <div className='bg-gray-300 w-[300px] h-[300px] rounded-md animate-pulse'></div>
-              <div className='bg-gray-300 w-[300px] h-[300px] rounded-md animate-pulse'></div>
-              <div className='bg-gray-300 w-[300px] h-[300px] rounded-md animate-pulse'></div>
-            </ul>
+            <div>
+              <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10'>
+                <div className='bg-gray-300 w-[300px] h-[350px] rounded-md animate-pulse flex items-center justify-center'>
+                  <p className='font-cal text-3xl text-gray-500'>Loading ...</p>
+                </div>
+                <div className='bg-gray-300 w-[300px] h-[350px] rounded-md animate-pulse flex items-center justify-center'>
+                  <p className='font-cal text-3xl text-gray-500'>Loading ...</p>
+                </div>
+                <div className='bg-gray-300 w-[300px] h-[350px] rounded-md animate-pulse flex items-center justify-center'>
+                  <p className='font-cal text-3xl text-gray-500'>Loading ...</p>
+                </div>
+              </ul>
+            </div>
           ) : (
             <div>
               <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10'>
@@ -211,9 +219,11 @@ export default function Home() {
                 ))}
               </ul>
 
-              {/* <p className='font-cal text-2xl text-center w-full'>
+              {/* {links.length === 0 && (
+                <p className='font-cal text-2xl text-center w-full'>
                   No links found! please create your first link 🚀
-                </p> */}
+                </p>
+              )} */}
             </div>
           )}
         </div>
