@@ -11,8 +11,6 @@ export default function Home() {
 
   const userId = data?.user.id;
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  // const [links, setLinks] = useState([]);
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const linkTitle = useRef(null);
@@ -41,7 +39,6 @@ export default function Home() {
   };
 
   const { data: links, error } = useSWR(`/api/link`, getLinks);
-  if (error) return "An error has occured";
 
   const createLink = async event => {
     event.preventDefault();
@@ -168,11 +165,20 @@ export default function Home() {
       </Modal>
 
       <div className='container mx-auto max-w-5xl my-20 flex flex-col items-start justify-center space-y-12 '>
-        <button
-          className=' bg-gray-100 text-black  hover:shadow-xl px-5 py-5 text-lg font-cal rounded-md transition-all ease-in-out duration-150'
-          onClick={() => setShowModal(true)}>
-          create links 🚀
-        </button>
+        <div className='flex  justify-between w-full items-center py-8'>
+          {data?.user.name && (
+            <p className='text-3xl font-cal'>
+              Welcome back{" "}
+              <span className='text-blue-500'> {data?.user?.name} </span>
+              <span> 👋</span>
+            </p>
+          )}
+          <button
+            className=' bg-gray-100 text-black hover:bg-gray-200 px-5 py-5 text-lg font-cal rounded-md transition-all ease-in-out duration-150'
+            onClick={() => setShowModal(true)}>
+            create links 🚀
+          </button>
+        </div>
 
         <div>
           {!links ? (
