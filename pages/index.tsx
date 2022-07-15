@@ -2,8 +2,9 @@ import Head from "next/head";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Modal from "../components/Modal";
+import type { FormEvent } from "react";
 
 export default function Home() {
   const { data, status } = useSession();
@@ -14,8 +15,12 @@ export default function Home() {
   const [links, setLinks] = useState([]);
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  console.log(userId);
-  console.log(links);
+  const linkTitle = useRef(null);
+  const linkUrl = useRef(null);
+  const linkImage = useRef(null);
+  const linkCategory = useRef(null);
+  const linkDescription = useRef(null);
+
   if (status === "unauthenticated") {
     router.push("/login");
   }
@@ -33,20 +38,25 @@ export default function Home() {
     }
   };
 
-  const createLink = async () => {
+  const createLink = async event => {
+    event.preventDefault();
+
     try {
-      const response = await fetch("/api/links", {
+      const responce = await fetch("/api/link", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          category: "Open Source",
-          description: "Fullstack React framework",
-          imageUrl: "https://nextjs.org/static/twitter-cards/home.jpg",
-          title: "Next.js",
-          url: "https://nextjs.org",
+          title: linkTitle.current?.value,
+          imageUrl: linkImage.current?.value,
+          url: linkUrl.current?.value,
+          category: linkCategory.current?.value,
+          description: linkDescription.current?.value,
           userId: userId,
         }),
       });
+      if (responce.ok) {
+        getLinks();
+      }
     } catch (error) {
       console.log("there was an error submitting", error);
     }
@@ -66,9 +76,7 @@ export default function Home() {
       <Modal showModal={showModal} setShowModal={setShowModal}>
         <form
           onSubmit={event => {
-            // event.preventDefault();
-            // setCreatingSite(true);
-            // createSite(event);
+            createLink(event);
           }}
           className='inline-block w-full max-w-md pt-8 overflow-hidden text-center align-middle transition-all bg-white shadow-xl rounded-lg'>
           <h2 className='font-cal text-2xl mb-6'>Create a New Link</h2>
@@ -80,7 +88,7 @@ export default function Home() {
                 name='name'
                 required
                 placeholder='Site Name'
-                // ref={siteNameRef}
+                ref={linkTitle}
                 type='text'
               />
             </div>
@@ -91,7 +99,7 @@ export default function Home() {
                 name='Url'
                 required
                 placeholder='Url'
-                // ref={siteNameRef}
+                ref={linkUrl}
                 type='url'
               />
             </div>
@@ -102,7 +110,7 @@ export default function Home() {
                 name='image'
                 required
                 placeholder='Image'
-                // ref={siteNameRef}
+                ref={linkImage}
                 type='url'
               />
             </div>
@@ -113,7 +121,7 @@ export default function Home() {
                 name='Category'
                 required
                 placeholder='Category'
-                // ref={siteNameRef}
+                ref={linkCategory}
                 type='text'
               />
             </div>
@@ -124,7 +132,7 @@ export default function Home() {
                 name='Description'
                 required
                 placeholder='Description'
-                // ref={siteNameRef}
+                ref={linkDescription}
                 type='text'
               />
             </div>
@@ -150,7 +158,7 @@ export default function Home() {
             <button
               type='submit'
               // disabled={creatingSite || error !== null}
-              // onClick={() => router.push("/editor")}
+              onClick={() => setShowModal(false)}
               className=' bg-white text-gray-600 hover:text-black w-full px-5 py-5 text-sm border-t border-l border-gray-300 rounded-br focus:outline-none focus:ring-0 transition-all ease-in-out duration-150'>
               CREATE LINK
             </button>

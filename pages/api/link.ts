@@ -16,7 +16,7 @@ export default async function handler(
   if (req.method === "GET") {
     return await getLinks(req, res, session);
   } else if (req.method === "POST") {
-    return await addLink(req, res, session);
+    return await addLink(req, res);
   } else {
     return res
       .status(405)
@@ -48,7 +48,6 @@ async function getLinks(
 async function addLink(
   req: NextApiRequest,
   res: NextApiResponse,
-  session: Session
 ) {
   const body = req.body;
   try {
