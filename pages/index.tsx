@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import Modal from "../components/Modal";
 import useSWR from "swr";
+import Button from "../components/Button";
 
 export default function Home() {
   const { data, status } = useSession();
@@ -13,7 +14,7 @@ export default function Home() {
   const router = useRouter();
   const [showModal, setShowModal] = useState<boolean>(false);
   const [userSearch, setUserSearch] = useState<string>("");
-
+  const [pagination, setPagination] = useState<number>(3);
 
   const linkTitle = useRef(null);
   const linkUrl = useRef(null);
@@ -215,11 +216,7 @@ export default function Home() {
               </div>
             )}
           </div>
-          <button
-            className=' bg-gray-100 text-black hover:bg-gray-200 px-5 py-3 text-md font-cal rounded-md transition-all ease-in-out duration-150'
-            onClick={() => setShowModal(true)}>
-            Create Links 🔥
-          </button>
+          <Button label='Create Links 🔥' onclick={() => setShowModal(true)} />
         </div>
         <div>
           {!links ? (
@@ -238,7 +235,7 @@ export default function Home() {
             </div>
           ) : (
             <ul className='min-w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 '>
-              {links?.map(link => (
+              {links?.slice(0, pagination).map(link => (
                 <Link href={link.url} key={link.id}>
                   <a>
                     <li className='shadow lg:h-full    md:max-w-md  rounded-md hover:shadow-xl transition duration-500'>
@@ -263,6 +260,14 @@ export default function Home() {
                 </Link>
               ))}
             </ul>
+          )}
+          {pagination < links?.length && (
+            <div className='w-full flex items-center justify-center py-12'>
+              <Button
+                label='Load More ⭐'
+                onclick={() => setPagination(pagination + 2)}
+              />
+            </div>
           )}
           {links?.length === 0 && (
             <p className='font-cal text-2xl text-center w-full'>
