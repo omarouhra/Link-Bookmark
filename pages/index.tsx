@@ -14,6 +14,9 @@ export default function Home() {
   const router = useRouter();
   const [showModal, setShowModal] = useState<boolean>(false);
   const [userSearch, setUserSearch] = useState<string>("");
+  const [userSearchLinks, setUserSearchLinks] = useState<
+    Array<string | object>
+  >([]);
   const [pagination, setPagination] = useState<number>(3);
 
   const linkTitle = useRef(null);
@@ -49,6 +52,25 @@ export default function Home() {
 
       if (response.ok) {
         return await response.json();
+      }
+    } catch (error) {
+      console.log("there was an error submitting", error);
+    }
+  };
+
+  const getUsersSearchLinks = async (id: string) => {
+    try {
+      const response = await fetch("/api/user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: id,
+        }),
+      });
+
+      if (response.ok) {
+        const links = await response.json();
+        setUserSearchLinks(links);
       }
     } catch (error) {
       console.log("there was an error submitting", error);
@@ -193,7 +215,7 @@ export default function Home() {
         </div>
         <div className='flex flex-col  justify-start space-y-8 md:space-y-0 md:flex-row  md:justify-between w-full md:items-center '>
           <div className=' relative border border-gray-200 rounded-lg flex flex-start items-center'>
-            <span className='pl-5 pr-1'>🚀</span>
+            <span className='pl-5 pr-1'>🔍</span>
             <input
               className='w-full px-5 py-3 text-gray-700 bg-white focus:ring-0 focus:outline-none  rounded-none rounded-r-lg placeholder-gray-400'
               name='userName'
@@ -205,14 +227,18 @@ export default function Home() {
               type='text'
             />
             {userSearch && (
-              <div className='absolute mt-1 top-full flex flex-col opacity-90 hover:opacity-100  bg-white w-full rounded-xl overflow-hidden  shadow-2xl transition duration-500 cursor-pointer'>
+              <div className='absolute mt-1 top-full flex flex-col opacity-90 hover:opacity-100  bg-white w-full rounded-xl overflow-hidden  shadow-2xl transition duration-500 '>
                 {searchUsers.length ? (
                   searchUsers.map(user => (
-                    <p
+                    <button
                       key={user.id}
-                      className='border-b-2 py-3 bg-white px-2  font-cal hover:shadow-lg transition duration-200'>
+                      onClick={() => {
+                        getUsersSearchLinks(user.id);
+                        setUserSearch("");
+                      }}
+                      className='border-b-2 py-3 bg-white px-2 text-left  font-cal hover:shadow-lg transition duration-200'>
                       {user.name}
-                    </p>
+                    </button>
                   ))
                 ) : (
                   <p className='border-b-2 py-3 bg-white px-2  font-cal hover:shadow-lg transition duration-200'>
@@ -222,10 +248,20 @@ export default function Home() {
               </div>
             )}
           </div>
-          <Button label='Create Links 🔥' onclick={() => setShowModal(true)} />
+
+          <Button
+            label={
+              userSearchLinks.length != 0 ? "Your Links ➡️" : "Create Links 🔥"
+            }
+            onclick={() => {
+              userSearchLinks.length != 0
+                ? setUserSearchLinks([])
+                : setShowModal(true);
+            }}
+          />
         </div>
         <div className='w-full'>
-          {!links ? (
+          {!links || !userSearchLinks ? (
             <div>
               <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10'>
                 <div className='bg-gray-300 min-w-full md:w-[300px] h-[350px] rounded-md animate-pulse flex items-center justify-center'>
@@ -240,41 +276,96 @@ export default function Home() {
               </ul>
             </div>
           ) : (
-            <ul className='min-w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 '>
-              {links?.slice(0, pagination).map(link => (
-                <Link href={link.url} key={link.id}>
-                  <a>
-                    <li className='shadow lg:h-full    md:max-w-md  rounded-md hover:shadow-xl transition duration-500'>
-                      <img
-                        className='shadow rounded-t-md min-h-[200px] w-full object-cover'
-                        src={link.imageUrl}
-                      />
-                      <div className='p-5 flex flex-col items-start space-y-2'>
-                        <p className='text-sm text-blue-500'>{link.category}</p>
-                        <p className='text-lg font-cal '>{link.title}</p>
-                        <p className='text-gray-600'>{link.description}</p>
-                        {userId === link.userId && (
+            <div>
+              {userSearchLinks?.name && (
+                <div className='py-8'>
+                  <p className='font-cal text-xl mb-2'>
+                    {" "}
+                    <span className='text-blue-500'>
+                      {userSearchLinks?.name.toUpperCase()}{" "}
+                    </span>
+                    Links
+                  </p>
+
+                  <p className='font-cal text-gray-600 '>
+                    If you like any links you can add them by click on 🚀 Button{" "}
+                  </p>
+                </div>
+              )}
+              {userSearchLinks.length != 0 ? (
+                <ul className='min-w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 '>
+                  {userSearchLinks?.bookmarks
+                    ?.slice(0, pagination)
+                    .map(link => (
+                      <Link href={link.url} key={link.id}>
+                        <a>
+                          <li className='shadow lg:h-full    md:max-w-md  rounded-md hover:shadow-xl transition duration-500'>
+                            <img
+                              className='shadow rounded-t-md min-h-[200px] w-full object-cover'
+                              src={link.imageUrl}
+                            />
+                            <div className='p-5 flex flex-col items-start space-y-2'>
+                              <p className='text-sm text-blue-500'>
+                                {link.category}
+                              </p>
+                              <p className='text-lg font-cal '>{link.title}</p>
+                              <p className='text-gray-600'>
+                                {link.description}
+                              </p>
+                              {userId === link.userId && (
+                                <img
+                                  alt='profile'
+                                  className='rounded-full w-6 h-6 ml-auto'
+                                  src={data.user.image}
+                                />
+                              )}
+                            </div>
+                          </li>
+                        </a>
+                      </Link>
+                    ))}
+                </ul>
+              ) : (
+                <ul className='min-w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 '>
+                  {links?.slice(0, pagination).map(link => (
+                    <Link href={link.url} key={link.id}>
+                      <a>
+                        <li className='shadow lg:h-full    md:max-w-md  rounded-md hover:shadow-xl transition duration-500'>
                           <img
-                            alt='profile'
-                            className='rounded-full w-6 h-6 ml-auto'
-                            src={data.user.image}
+                            className='shadow rounded-t-md min-h-[200px] w-full object-cover'
+                            src={link.imageUrl}
                           />
-                        )}
-                      </div>
-                    </li>
-                  </a>
-                </Link>
-              ))}
-            </ul>
-          )}
-          {links && pagination < links?.length && (
-            <div className='w-full flex items-center justify-center py-12'>
-              <Button
-                label='Load More ⭐'
-                onclick={() => setPagination(pagination + 3)}
-              />
+                          <div className='p-5 flex flex-col items-start space-y-2'>
+                            <p className='text-sm text-blue-500'>
+                              {link.category}
+                            </p>
+                            <p className='text-lg font-cal '>{link.title}</p>
+                            <p className='text-gray-600'>{link.description}</p>
+                            {userId === link.userId && (
+                              <img
+                                alt='profile'
+                                className='rounded-full w-6 h-6 ml-auto'
+                                src={data.user.image}
+                              />
+                            )}
+                          </div>
+                        </li>
+                      </a>
+                    </Link>
+                  ))}
+                </ul>
+              )}
             </div>
           )}
+          {(links && pagination < links?.length) ||
+            (userSearchLinks && pagination < userSearchLinks?.length && (
+              <div className='w-full flex items-center justify-center py-12'>
+                <Button
+                  label='Load More ⭐'
+                  onclick={() => setPagination(pagination + 3)}
+                />
+              </div>
+            ))}
           {links?.length === 0 && (
             <p className='font-cal text-2xl text-center w-full'>
               No links found! please create your first link 🚀
