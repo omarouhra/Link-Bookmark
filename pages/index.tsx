@@ -21,7 +21,6 @@ export default function Home() {
   const linkImage = useRef(null);
   const linkCategory = useRef(null);
   const linkDescription = useRef(null);
-  // const userSearch = useRef(null);
 
   if (status === "unauthenticated") {
     router.push("/login");
@@ -58,6 +57,12 @@ export default function Home() {
 
   const { data: links } = useSWR(`/api/link`, getLinks);
   const { data: users } = useSWR(`/api/user`, getUsers);
+
+  const searchUsers = users?.filter(
+    user =>
+      user.id != userId &&
+      user.name.toLowerCase().startsWith(userSearch.toLowerCase())
+  );
 
   const createLink = async event => {
     event.preventDefault();
@@ -200,20 +205,20 @@ export default function Home() {
               type='text'
             />
             {userSearch && (
-              <div className='absolute top-14 flex flex-col opacity-90 hover:opacity-100  bg-white w-full rounded-xl overflow-hidden  shadow-2xl transition duration-500'>
-                {users
-                  ?.filter(
-                    user =>
-                      user.id != userId &&
-                      user.name.toLowerCase().startsWith(userSearch)
-                  )
-                  .map(user => (
+              <div className='absolute mt-1 top-full flex flex-col opacity-90 hover:opacity-100  bg-white w-full rounded-xl overflow-hidden  shadow-2xl transition duration-500 cursor-pointer'>
+                {searchUsers.length ? (
+                  searchUsers.map(user => (
                     <p
                       key={user.id}
                       className='border-b-2 py-3 bg-white px-2  font-cal hover:shadow-lg transition duration-200'>
                       {user.name}
                     </p>
-                  ))}
+                  ))
+                ) : (
+                  <p className='border-b-2 py-3 bg-white px-2  font-cal hover:shadow-lg transition duration-200'>
+                    No user founded 🥺
+                  </p>
+                )}
               </div>
             )}
           </div>
@@ -266,7 +271,7 @@ export default function Home() {
             <div className='w-full flex items-center justify-center py-12'>
               <Button
                 label='Load More ⭐'
-                onclick={() => setPagination(pagination + 2)}
+                onclick={() => setPagination(pagination + 3)}
               />
             </div>
           )}
