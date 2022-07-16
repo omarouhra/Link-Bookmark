@@ -301,7 +301,7 @@ export default function Home() {
                         <a>
                           <li className='shadow lg:h-full    md:max-w-md  rounded-md hover:shadow-xl transition duration-500'>
                             <img
-                              className='shadow rounded-t-md min-h-[200px] w-full object-cover'
+                              className='shadow rounded-t-md h-[200px] w-full object-cover'
                               src={link.imageUrl}
                             />
                             <div className='p-5 flex flex-col items-start space-y-2'>
@@ -332,7 +332,7 @@ export default function Home() {
                       <a>
                         <li className='shadow lg:h-full    md:max-w-md  rounded-md hover:shadow-xl transition duration-500'>
                           <img
-                            className='shadow rounded-t-md min-h-[200px] w-full object-cover'
+                            className='shadow rounded-t-md h-[200px]  w-full object-cover'
                             src={link.imageUrl}
                           />
                           <div className='p-5 flex flex-col items-start space-y-2'>
@@ -357,15 +357,15 @@ export default function Home() {
               )}
             </div>
           )}
-          {(links && pagination < links?.length) ||
-            (userSearchLinks && pagination < userSearchLinks?.length && (
-              <div className='w-full flex items-center justify-center py-12'>
-                <Button
-                  label='Load More ⭐'
-                  onclick={() => setPagination(pagination + 3)}
-                />
-              </div>
-            ))}
+          {((links && pagination < links?.length) ||
+            (userSearchLinks && pagination < userSearchLinks?.length)) && (
+            <div className='w-full flex items-center justify-center py-12'>
+              <Button
+                label='Load More ⭐'
+                onclick={() => setPagination(pagination + 3)}
+              />
+            </div>
+          )}
           {links?.length === 0 && (
             <p className='font-cal text-2xl text-center w-full'>
               No links found! please create your first link 🚀
