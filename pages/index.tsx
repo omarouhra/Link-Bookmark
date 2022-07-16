@@ -12,12 +12,14 @@ export default function Home() {
   const userId = data?.user.id;
   const router = useRouter();
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [userSearch, setUserSearch] = useState<string>("");
 
   const linkTitle = useRef(null);
   const linkUrl = useRef(null);
   const linkImage = useRef(null);
   const linkCategory = useRef(null);
   const linkDescription = useRef(null);
+  // const userSearch = useRef(null);
 
   if (status === "unauthenticated") {
     router.push("/login");
@@ -72,6 +74,7 @@ export default function Home() {
       </Head>
 
       <Modal showModal={showModal} setShowModal={setShowModal}>
+        {/* Need to create a form component! */}
         <form
           onSubmit={event => {
             createLink(event);
@@ -134,18 +137,11 @@ export default function Home() {
                 type='text'
               />
             </div>
-
-            {/* {error && (
-              <p className='px-5 text-left text-red-500'>
-                <b>{error}</b> is not available. Please choose another
-                subdomain.
-              </p>
-            )} */}
           </div>
           <div className='flex justify-between items-center mt-10 w-full'>
             <button
               type='button'
-              className='w-full px-5 py-5 text-sm text-gray-600 hover:text-black border-t border-gray-300 rounded-bl focus:outline-none focus:ring-0 transition-all ease-in-out duration-150'
+              className='w-full px-5 py-5 text-sm text-gray-600 hover:text-black border-t border-gray-300 rounded-bl  focus:outline-none focus:ring-0 transition-all ease-in-out duration-150'
               onClick={() => {
                 // setError(null);
                 setShowModal(false);
@@ -163,23 +159,47 @@ export default function Home() {
           </div>
         </form>
       </Modal>
-
-      <div className='container mx-auto max-w-5xl my-20 flex flex-col items-start justify-center space-y-12 '>
-        <div className='flex  justify-between w-full items-center py-8'>
+      <div className='container mx-auto max-w-5xl my-20 flex flex-col items-start justify-center space-y-12 px-5 '>
+        <div>
           {data?.user.name && (
-            <p className='text-3xl font-cal'>
-              Welcome back{" "}
+            <p className='text-2xl font-cal'>
+              Welcome{" "}
               <span className='text-blue-500'> {data?.user?.name} </span>
               <span> 👋</span>
             </p>
           )}
+        </div>
+        <div className='flex flex-col  justify-start space-y-8 md:space-y-0 md:flex-row  md:justify-between w-full md:items-center '>
+          <div className=' relative border border-gray-200 rounded-lg flex flex-start items-center'>
+            <span className='pl-5 pr-1'>🚀</span>
+            <input
+              className='w-full px-5 py-3 text-gray-700 bg-white focus:ring-0 focus:outline-none  rounded-none rounded-r-lg placeholder-gray-400'
+              name='userName'
+              required
+              placeholder='Search for a user'
+              onChange={e => {
+                setUserSearch(e.currentTarget?.value);
+              }}
+              type='text'
+            />
+            {userSearch && (
+              <div className='absolute top-14 flex flex-col opacity-90 hover:opacity-100  bg-white w-full rounded-xl overflow-hidden px-2 shadow-2xl transition duration-500'>
+                {links?.map(link => (
+                  <p
+                    key={link.id}
+                    className='border-b-2 py-3 px-2   font-cal hover:shadow-lg hover:scale-95 transition duration-200'>
+                    {link.title}
+                  </p>
+                ))}
+              </div>
+            )}
+          </div>
           <button
-            className=' bg-gray-100 text-black hover:bg-gray-200 px-5 py-5 text-lg font-cal rounded-md transition-all ease-in-out duration-150'
+            className=' bg-gray-100 text-black hover:bg-gray-200 px-5 py-3 text-md font-cal rounded-md transition-all ease-in-out duration-150'
             onClick={() => setShowModal(true)}>
-            create links 🚀
+            Create Links 🔥
           </button>
         </div>
-
         <div>
           {!links ? (
             <div>
@@ -196,42 +216,37 @@ export default function Home() {
               </ul>
             </div>
           ) : (
-            <div>
-              <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10'>
-                {links?.map(link => (
-                  <Link href={link.url} key={link.id}>
-                    <a>
-                      <li className='shadow lg:h-full  max-w-md  rounded-md hover:shadow-xl transition duration-500'>
-                        <img
-                          className='shadow rounded-t-md min-h-[200px] w-full object-cover'
-                          src={link.imageUrl}
-                        />
-                        <div className='p-5 flex flex-col items-start space-y-2'>
-                          <p className='text-sm text-blue-500'>
-                            {link.category}
-                          </p>
-                          <p className='text-lg font-cal '>{link.title}</p>
-                          <p className='text-gray-600'>{link.description}</p>
-                          {userId === link.userId && (
-                            <img
-                              alt='profile'
-                              className='rounded-full w-6 h-6 ml-auto'
-                              src={data.user.image}
-                            />
-                          )}
-                        </div>
-                      </li>
-                    </a>
-                  </Link>
-                ))}
-              </ul>
-
-              {links.length === 0 && (
-                <p className='font-cal text-2xl text-center w-full'>
-                  No links found! please create your first link 🚀
-                </p>
-              )}
-            </div>
+            <ul className='min-w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 '>
+              {links?.map(link => (
+                <Link href={link.url} key={link.id}>
+                  <a>
+                    <li className='shadow lg:h-full    md:max-w-md  rounded-md hover:shadow-xl transition duration-500'>
+                      <img
+                        className='shadow rounded-t-md min-h-[200px] w-full object-cover'
+                        src={link.imageUrl}
+                      />
+                      <div className='p-5 flex flex-col items-start space-y-2'>
+                        <p className='text-sm text-blue-500'>{link.category}</p>
+                        <p className='text-lg font-cal '>{link.title}</p>
+                        <p className='text-gray-600'>{link.description}</p>
+                        {userId === link.userId && (
+                          <img
+                            alt='profile'
+                            className='rounded-full w-6 h-6 ml-auto'
+                            src={data.user.image}
+                          />
+                        )}
+                      </div>
+                    </li>
+                  </a>
+                </Link>
+              ))}
+            </ul>
+          )}
+          {links?.length === 0 && (
+            <p className='font-cal text-2xl text-center w-full'>
+              No links found! please create your first link 🚀
+            </p>
           )}
         </div>
       </div>

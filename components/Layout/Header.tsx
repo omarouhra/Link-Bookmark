@@ -9,7 +9,7 @@ const Header = () => {
 
   return (
     <header className='font-cal '>
-      <div className='max-w-7xl mx-auto flex flex-wrap p-5  flex-col md:flex-row items-center'>
+      <div className='max-w-7xl   mx-auto flex  p-5  flex-col md:flex-row items-center'>
         <Link href='/'>
           <a className='flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0'>
             <svg
@@ -27,9 +27,9 @@ const Header = () => {
             <span className='text-2xl'>Links</span>
           </a>
         </Link>
-        <div className='md:ml-auto flex flex-wrap items-center text-base justify-center'>
+        <div className='md:ml-auto flex text-base  justify-between md:justify-center w-full md:w-auto'>
           {status === "authenticated" && (
-            <nav>
+            <nav className='-mt-3 md:mt-1'>
               <div className='flex items-center space-x-5'>
                 <Link href='/favorites'>
                   <a className='inline-flex items-center border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0'>
@@ -49,7 +49,7 @@ const Header = () => {
               {user?.image ? (
                 <img
                   alt='profile'
-                  className='rounded-full w-12 h-12 ml-5'
+                  className='rounded-full w-10 h-10 ml-5'
                   src={user.image}
                 />
               ) : (
