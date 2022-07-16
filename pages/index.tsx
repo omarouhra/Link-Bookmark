@@ -14,6 +14,7 @@ export default function Home() {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [userSearch, setUserSearch] = useState<string>("");
 
+
   const linkTitle = useRef(null);
   const linkUrl = useRef(null);
   const linkImage = useRef(null);
@@ -39,8 +40,23 @@ export default function Home() {
       console.log("there was an error submitting", error);
     }
   };
+  const getUsers = async () => {
+    try {
+      const response = await fetch("/api/user", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
 
-  const { data: links, error } = useSWR(`/api/link`, getLinks);
+      if (response.ok) {
+        return await response.json();
+      }
+    } catch (error) {
+      console.log("there was an error submitting", error);
+    }
+  };
+
+  const { data: links } = useSWR(`/api/link`, getLinks);
+  const { data: users } = useSWR(`/api/user`, getUsers);
 
   const createLink = async event => {
     event.preventDefault();
@@ -176,7 +192,7 @@ export default function Home() {
               className='w-full px-5 py-3 text-gray-700 bg-white focus:ring-0 focus:outline-none  rounded-none rounded-r-lg placeholder-gray-400'
               name='userName'
               required
-              placeholder='Search for a user'
+              placeholder='Github Username...'
               onChange={e => {
                 setUserSearch(e.currentTarget?.value);
               }}
@@ -184,13 +200,18 @@ export default function Home() {
             />
             {userSearch && (
               <div className='absolute top-14 flex flex-col opacity-90 hover:opacity-100  bg-white w-full rounded-xl overflow-hidden px-2 shadow-2xl transition duration-500'>
-                {links?.map(link => (
-                  <p
-                    key={link.id}
-                    className='border-b-2 py-3 px-2   font-cal hover:shadow-lg hover:scale-95 transition duration-200'>
-                    {link.title}
-                  </p>
-                ))}
+                {users
+                  ?.filter(
+                    user =>
+                      user.id != userId && user.name.startsWith(userSearch)
+                  )
+                  .map(user => (
+                    <p
+                      key={user.id}
+                      className='border-b-2 py-3 px-2   font-cal hover:shadow-lg hover:scale-95 transition duration-200'>
+                      {user.name}
+                    </p>
+                  ))}
               </div>
             )}
           </div>
