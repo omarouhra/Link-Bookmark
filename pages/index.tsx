@@ -200,16 +200,17 @@ export default function Home() {
               type='text'
             />
             {userSearch && (
-              <div className='absolute top-14 flex flex-col opacity-90 hover:opacity-100  bg-white w-full rounded-xl overflow-hidden px-2 shadow-2xl transition duration-500'>
+              <div className='absolute top-14 flex flex-col opacity-90 hover:opacity-100  bg-white w-full rounded-xl overflow-hidden  shadow-2xl transition duration-500'>
                 {users
                   ?.filter(
                     user =>
-                      user.id != userId && user.name.startsWith(userSearch)
+                      user.id != userId &&
+                      user.name.toLowerCase().startsWith(userSearch)
                   )
                   .map(user => (
                     <p
                       key={user.id}
-                      className='border-b-2 py-3 px-2   font-cal hover:shadow-lg hover:scale-95 transition duration-200'>
+                      className='border-b-2 py-3 bg-white px-2  font-cal hover:shadow-lg transition duration-200'>
                       {user.name}
                     </p>
                   ))}
@@ -218,17 +219,17 @@ export default function Home() {
           </div>
           <Button label='Create Links 🔥' onclick={() => setShowModal(true)} />
         </div>
-        <div>
+        <div className='w-full'>
           {!links ? (
             <div>
               <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10'>
-                <div className='bg-gray-300 w-[300px] h-[350px] rounded-md animate-pulse flex items-center justify-center'>
+                <div className='bg-gray-300 min-w-full md:w-[300px] h-[350px] rounded-md animate-pulse flex items-center justify-center'>
                   <p className='font-cal text-3xl text-gray-500'>Loading ...</p>
                 </div>
-                <div className='bg-gray-300 w-[300px] h-[350px] rounded-md animate-pulse flex items-center justify-center'>
+                <div className='bg-gray-300 min-w-full md:w-[300px] h-[350px] rounded-md animate-pulse flex items-center justify-center'>
                   <p className='font-cal text-3xl text-gray-500'>Loading ...</p>
                 </div>
-                <div className='bg-gray-300 w-[300px] h-[350px] rounded-md animate-pulse flex items-center justify-center'>
+                <div className='bg-gray-300 min-w-full md:w-[300px] h-[350px] rounded-md animate-pulse flex items-center justify-center'>
                   <p className='font-cal text-3xl text-gray-500'>Loading ...</p>
                 </div>
               </ul>
@@ -261,7 +262,7 @@ export default function Home() {
               ))}
             </ul>
           )}
-          {pagination < links?.length && (
+          {links && pagination < links?.length && (
             <div className='w-full flex items-center justify-center py-12'>
               <Button
                 label='Load More ⭐'
