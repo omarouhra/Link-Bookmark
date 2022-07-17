@@ -119,12 +119,13 @@ export default function Home() {
               name='userName'
               required
               placeholder='Github Username...'
+              value={userSearch}
               onChange={e => {
                 setUserSearch(e.currentTarget?.value);
               }}
               type='text'
             />
-            {userSearch && (
+            {userSearch.length != 0 && (
               <div className='absolute mt-1 top-full flex flex-col opacity-90 hover:opacity-100  bg-white w-full rounded-xl overflow-hidden  shadow-2xl transition duration-500 '>
                 {searchUsers.length ? (
                   searchUsers.map(user => (
