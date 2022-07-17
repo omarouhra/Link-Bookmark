@@ -2,16 +2,19 @@ import Head from "next/head";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Modal from "../components/Modal";
 import useSWR from "swr";
 import Button from "../components/Button";
 
 export default function Home() {
+  // Session Data
   const { data, status } = useSession();
 
   const userId = data?.user.id;
   const router = useRouter();
+
+  // App States
   const [showModal, setShowModal] = useState<boolean>(false);
   const [userSearch, setUserSearch] = useState<string>("");
   const [userSearchLinks, setUserSearchLinks] = useState<
@@ -19,16 +22,19 @@ export default function Home() {
   >([]);
   const [pagination, setPagination] = useState<number>(3);
 
+  // Form refs
   const linkTitle = useRef(null);
   const linkUrl = useRef(null);
   const linkImage = useRef(null);
   const linkCategory = useRef(null);
   const linkDescription = useRef(null);
 
+  // To be replaced with a hook
   if (status === "unauthenticated") {
     router.push("/login");
   }
 
+  // Async functions
   const getLinks = async () => {
     try {
       const response = await fetch("/api/link", {
@@ -77,6 +83,7 @@ export default function Home() {
     }
   };
 
+  // SWR
   const { data: links } = useSWR(`/api/link`, getLinks);
   const { data: users } = useSWR(`/api/user`, getUsers);
 
