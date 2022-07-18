@@ -18,9 +18,7 @@ export default function Home() {
   // App States
   const [showModal, setShowModal] = useState<boolean>(false);
   const [userSearch, setUserSearch] = useState<string>("");
-  const [userSearchLinks, setUserSearchLinks] = useState<
-    Array<string | object>
-  >([]);
+  const [userSearchLinks, setUserSearchLinks] = useState<any>([]);
   const [pagination, setPagination] = useState<number>(3);
 
   // To be replaced with a hook
@@ -186,9 +184,9 @@ export default function Home() {
                     Links
                   </p>
 
-                  <p className='font-cal text-gray-600 '>
+                  {/* <p className='font-cal text-gray-600 '>
                     If you like any links you can add them by click on 🚀 Button{" "}
-                  </p>
+                  </p> */}
                 </div>
               )}
               {userSearchLinks.length != 0 ? (
