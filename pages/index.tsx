@@ -7,6 +7,7 @@ import Modal from "../components/Modal";
 import useSWR from "swr";
 import Button from "../components/Button";
 import Form from "../components/Form";
+import BookmarkedLink from "../components/BookmarkedLink";
 
 export default function Home() {
   // Session Data
@@ -189,67 +190,19 @@ export default function Home() {
                   </p> */}
                 </div>
               )}
-              {userSearchLinks.length != 0 ? (
+              {userSearchLinks.length === 0 ? (
+                <ul className='min-w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 '>
+                  {links?.slice(0, pagination).map(link => (
+                    <BookmarkedLink link={link} />
+                  ))}
+                </ul>
+              ) : (
                 <ul className='min-w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 '>
                   {userSearchLinks?.bookmarks
                     ?.slice(0, pagination)
                     .map(link => (
-                      <Link href={link.url} key={link.id}>
-                        <a>
-                          <li className='shadow lg:h-full    md:max-w-md  rounded-md hover:shadow-xl transition duration-500'>
-                            <img
-                              className='shadow rounded-t-md h-[200px] w-full object-cover'
-                              src={link.imageUrl}
-                            />
-                            <div className='p-5 flex flex-col items-start space-y-2'>
-                              <p className='text-sm text-blue-500'>
-                                {link.category}
-                              </p>
-                              <p className='text-lg font-cal '>{link.title}</p>
-                              <p className='text-gray-600'>
-                                {link.description}
-                              </p>
-                              {userId === link.userId && (
-                                <img
-                                  alt='profile'
-                                  className='rounded-full w-6 h-6 ml-auto'
-                                  src={data.user.image}
-                                />
-                              )}
-                            </div>
-                          </li>
-                        </a>
-                      </Link>
+                      <BookmarkedLink link={link} />
                     ))}
-                </ul>
-              ) : (
-                <ul className='min-w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 '>
-                  {links?.slice(0, pagination).map(link => (
-                    <Link href={link.url} key={link.id}>
-                      <a>
-                        <li className='shadow lg:h-full    md:max-w-md  rounded-md hover:shadow-xl transition duration-500'>
-                          <img
-                            className='shadow rounded-t-md h-[200px]  w-full object-cover'
-                            src={link.imageUrl}
-                          />
-                          <div className='p-5 flex flex-col items-start space-y-2'>
-                            <p className='text-sm text-blue-500'>
-                              {link.category}
-                            </p>
-                            <p className='text-lg font-cal '>{link.title}</p>
-                            <p className='text-gray-600'>{link.description}</p>
-                            {userId === link.userId && (
-                              <img
-                                alt='profile'
-                                className='rounded-full w-6 h-6 ml-auto'
-                                src={data.user.image}
-                              />
-                            )}
-                          </div>
-                        </li>
-                      </a>
-                    </Link>
-                  ))}
                 </ul>
               )}
             </div>
