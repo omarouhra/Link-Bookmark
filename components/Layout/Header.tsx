@@ -5,9 +5,8 @@ import useRequireAuth from "../../lib/useRequiredAuth";
 
 const Header = () => {
   // Session Data
-  const session = useRequireAuth();
+  const {data:session} = useSession();
   const user = session?.user;
-  const userId = user?.id;
 
   return (
     <header className='font-cal '>

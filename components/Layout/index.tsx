@@ -1,11 +1,10 @@
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import React from "react";
-import useRequireAuth from "../../lib/useRequiredAuth";
 import Footer from "./Footer";
 import Header from "./Header";
 
 const Layout = ({ children }) => {
-
-
   return (
     <div>
       <Header />

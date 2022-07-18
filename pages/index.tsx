@@ -1,6 +1,5 @@
 import Head from "next/head";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import Modal from "../components/Modal";
 import useSWR from "swr";
@@ -11,9 +10,11 @@ import useRequireAuth from "../lib/useRequiredAuth";
 
 export default function Home() {
   // Session Data
-  const session = useRequireAuth();
+  const { data: session, status } = useSession();
   const user = session?.user;
   const userId = user?.id;
+
+  useRequireAuth();
 
   // App States
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -124,8 +125,8 @@ export default function Home() {
                     <button
                       key={user.id}
                       onClick={() => {
-                        getUsersSearchLinks(user.id);
                         setUserSearch("");
+                        getUsersSearchLinks(user.id);
                       }}
                       className='border-b-2 py-3 bg-white px-2 text-left  font-cal hover:shadow-lg transition duration-200'>
                       {user.name}
