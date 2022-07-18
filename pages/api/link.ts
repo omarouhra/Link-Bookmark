@@ -5,8 +5,6 @@ import { authOptions } from "./auth/[...nextauth]";
 import { unstable_getServerSession } from "next-auth/next";
 import prisma from "../../lib/prisma";
 
-
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -29,12 +27,14 @@ async function getLinks(
   res: NextApiResponse,
   session: Session
 ) {
+  /* @ts-ignore */
   if (!session?.user?.id) {
     return res.status(500).end("Server failed to get session user ID");
   }
   try {
     const links = await prisma.link.findMany({
       where: {
+        /* @ts-ignore */
         userId: session?.user?.id,
       },
     });
@@ -45,10 +45,7 @@ async function getLinks(
   }
 }
 
-async function addLink(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
+async function addLink(req: NextApiRequest, res: NextApiResponse) {
   const body = req.body;
   try {
     const newLink = await prisma.link.create({

@@ -12,6 +12,7 @@ export default function Home() {
   // Session Data
   const { data: session, status } = useSession();
   const user = session?.user;
+  /* @ts-ignore */
   const userId = user?.id;
 
   useRequireAuth();

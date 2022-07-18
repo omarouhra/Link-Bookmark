@@ -1,6 +1,5 @@
 import { useSession } from "next-auth/react";
 import React, { Dispatch, SetStateAction, useRef } from "react";
-import Input from "./Input";
 
 type FormType = {
   getLinks: () => {};
@@ -9,8 +8,9 @@ type FormType = {
 
 function Form({ getLinks, setShowModal }: FormType) {
   // Session Data
-  const { data, status } = useSession();
-  const userId = data?.user?.id;
+  const { data: session } = useSession();
+  /* @ts-ignore */
+  const userId = session?.user?.id;
 
   // Form refs
   const linkTitle = useRef(null);
