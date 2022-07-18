@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/router";
 
 function login() {
   const [loading, setLoading] = useState(false);
 
-  const router = useRouter();
 
   return (
     <div className='flex flex-col items-center justify-center h-[50vh] '>

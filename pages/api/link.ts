@@ -29,7 +29,7 @@ async function getLinks(
   res: NextApiResponse,
   session: Session
 ) {
-  if (!session.user.id) {
+  if (!session?.user?.id) {
     return res.status(500).end("Server failed to get session user ID");
   }
   try {

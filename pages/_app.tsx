@@ -1,8 +1,9 @@
 import "../styles/globals.css";
 import Layout from "../components/Layout";
 import { SessionProvider } from "next-auth/react";
+import type { AppProps } from "next/app";
 
-function MyApp({ Component, pageProps, session }) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <SessionProvider session={session}>
       <Layout>

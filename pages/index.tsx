@@ -1,31 +1,25 @@
 import Head from "next/head";
-import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Modal from "../components/Modal";
 import useSWR from "swr";
 import Button from "../components/Button";
 import Form from "../components/Form";
 import BookmarkedLink from "../components/BookmarkedLink";
+import useRequireAuth from "../lib/useRequiredAuth";
 
 export default function Home() {
   // Session Data
-  const { data, status } = useSession();
-
-  const userId = data?.user?.id;
-  const router = useRouter();
+  const session = useRequireAuth();
+  const user = session?.user;
+  const userId = user?.id;
 
   // App States
   const [showModal, setShowModal] = useState<boolean>(false);
   const [userSearch, setUserSearch] = useState<string>("");
   const [userSearchLinks, setUserSearchLinks] = useState<any>([]);
   const [pagination, setPagination] = useState<number>(3);
-
-  // To be replaced with a hook
-  if (status === "unauthenticated") {
-    router.push("/login");
-  }
 
   // Async functions
   const getLinks = async () => {
@@ -102,10 +96,9 @@ export default function Home() {
 
       <div className='container mx-auto max-w-5xl my-20 flex flex-col items-start justify-center space-y-12 px-5 '>
         <div>
-          {data?.user.name && (
+          {user?.name && (
             <p className='text-2xl font-cal'>
-              Welcome{" "}
-              <span className='text-blue-500'> {data?.user?.name} </span>
+              Welcome <span className='text-blue-500'> {user?.name} </span>
               <span> 👋</span>
             </p>
           )}
@@ -207,6 +200,7 @@ export default function Home() {
               )}
             </div>
           )}
+
           {((links && pagination < links?.length) ||
             (userSearchLinks && pagination < userSearchLinks?.length)) && (
             <div className='w-full flex items-center justify-center py-12'>

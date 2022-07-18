@@ -1,11 +1,13 @@
 import React from "react";
 import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
+import useRequireAuth from "../../lib/useRequiredAuth";
 
 const Header = () => {
-  const { data, status } = useSession();
-
-  const user = data?.user;
+  // Session Data
+  const session = useRequireAuth();
+  const user = session?.user;
+  const userId = user?.id;
 
   return (
     <header className='font-cal '>
@@ -27,32 +29,33 @@ const Header = () => {
             <span className='text-2xl'>Links</span>
           </a>
         </Link>
-        <div className='md:ml-auto flex text-base  justify-between md:justify-center w-full md:w-auto'>
-          {status === "authenticated" && (
-            <nav className='-mt-3 md:mt-1'>
-              <div className='flex items-center space-x-5'>
-                <button
-                  onClick={() => signOut()}
-                  className='inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0'>
-                  Logout
-                </button>
+        <nav className='md:ml-auto flex text-base  justify-between md:justify-center w-full md:w-auto'>
+          {user && (
+            <div className='flex '>
+              <nav className='-mt-3 md:mt-1'>
+                <div className='flex items-center space-x-5'>
+                  <button
+                    onClick={() => signOut()}
+                    className='inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0'>
+                    Logout
+                  </button>
+                </div>
+              </nav>
+
+              <div>
+                {user?.image ? (
+                  <img
+                    alt='profile'
+                    className='rounded-full w-10 h-10 ml-5'
+                    src={user.image}
+                  />
+                ) : (
+                  <div className='rounded-full w-12 h-12 animate-pulse bg-gray-300'></div>
+                )}
               </div>
-            </nav>
-          )}
-          {status === "authenticated" && (
-            <div>
-              {user?.image ? (
-                <img
-                  alt='profile'
-                  className='rounded-full w-10 h-10 ml-5'
-                  src={user.image}
-                />
-              ) : (
-                <div className='rounded-full w-12 h-12 animate-pulse bg-gray-300'></div>
-              )}
             </div>
           )}
-        </div>
+        </nav>
       </div>
     </header>
   );
