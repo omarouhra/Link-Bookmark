@@ -171,7 +171,7 @@ export default function Home() {
           ) : (
             <div>
               {userSearchLinks?.name && (
-                <div className='py-8'>
+                <div className='mb-8'>
                   <p className='font-cal text-xl mb-2'>
                     {" "}
                     <span className='text-blue-500'>

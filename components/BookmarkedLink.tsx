@@ -5,7 +5,7 @@ function BookmarkedLink({ link }: any) {
   return (
     <Link href={link.url} key={link.id}>
       <a>
-        <li className='shadow lg:h-full    md:max-w-md  rounded-md hover:shadow-xl transition duration-500'>
+        <li className='shadow lg:h-full animate-fade-in-up    md:max-w-md  rounded-md hover:shadow-xl transition duration-500'>
           <img
             className='shadow rounded-t-md h-[200px] w-full object-cover'
             src={link.imageUrl}
