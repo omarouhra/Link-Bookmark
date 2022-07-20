@@ -7,6 +7,7 @@ import Button from "../components/Button";
 import Form from "../components/Form";
 import BookmarkedLink from "../components/BookmarkedLink";
 import useRequireAuth from "../lib/useRequiredAuth";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Home() {
   // Session Data
@@ -32,9 +33,11 @@ export default function Home() {
       });
 
       if (response.ok) {
+        toast.success("Link added correctly");
         return await response.json();
       }
     } catch (error) {
+      toast.error("Something wrong");
       console.log("there was an error submitting", error);
     }
   };
@@ -92,10 +95,11 @@ export default function Home() {
 
       <Modal showModal={showModal} setShowModal={setShowModal}>
         <div className='inline-block w-full max-w-md pt-8 overflow-hidden text-center align-middle transition-all bg-white shadow-xl rounded-lg'>
-          <Form  setShowModal={setShowModal} />
+          <Form setShowModal={setShowModal} />
         </div>
       </Modal>
 
+      <Toaster />
       <div className='container mx-auto max-w-5xl my-20 flex flex-col items-start justify-center space-y-12 px-5 '>
         <div>
           {user?.name && (
@@ -153,7 +157,7 @@ export default function Home() {
             }}
           />
         </div>
-        <div className='w-full h-[50vh] '>
+        <div className='w-full '>
           {!links || !userSearchLinks ? (
             <div>
               <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10'>

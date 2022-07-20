@@ -39,6 +39,7 @@ function Form({ setShowModal }: FormType) {
       });
       if (responce.ok) {
         mutate("/api/link");
+        setShowModal(false);
       }
     } catch (error) {
       console.log("there was an error submitting", error);
@@ -121,7 +122,6 @@ function Form({ setShowModal }: FormType) {
         <button
           type='submit'
           // disabled={creatingSite || error !== null}
-          onClick={() => setShowModal(false)}
           className=' bg-white text-gray-600 hover:text-black w-full px-5 py-5 text-sm border-t border-l border-gray-300 rounded-br focus:outline-none focus:ring-0 transition-all ease-in-out duration-150'>
           CREATE LINK
         </button>
