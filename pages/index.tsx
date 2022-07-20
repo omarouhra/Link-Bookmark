@@ -92,7 +92,7 @@ export default function Home() {
 
       <Modal showModal={showModal} setShowModal={setShowModal}>
         <div className='inline-block w-full max-w-md pt-8 overflow-hidden text-center align-middle transition-all bg-white shadow-xl rounded-lg'>
-          <Form getLinks={() => getLinks()} setShowModal={setShowModal} />
+          <Form  setShowModal={setShowModal} />
         </div>
       </Modal>
 
@@ -153,7 +153,7 @@ export default function Home() {
             }}
           />
         </div>
-        <div className='w-full'>
+        <div className='w-full h-[50vh] '>
           {!links || !userSearchLinks ? (
             <div>
               <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10'>
@@ -212,7 +212,7 @@ export default function Home() {
               />
             </div>
           )}
-          {links?.length === 0 && (
+          {links?.length === 0 && userSearchLinks.length === 0 && (
             <p className='font-cal text-2xl text-center w-full'>
               No links found! please create your first link 🚀
             </p>

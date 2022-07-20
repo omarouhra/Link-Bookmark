@@ -1,12 +1,14 @@
 import { useSession } from "next-auth/react";
 import React, { Dispatch, SetStateAction, useRef } from "react";
+import useSWR, { useSWRConfig } from "swr";
 
 type FormType = {
-  getLinks: () => {};
   setShowModal: Dispatch<SetStateAction<boolean>>;
 };
 
-function Form({ getLinks, setShowModal }: FormType) {
+function Form({ setShowModal }: FormType) {
+  const { mutate } = useSWRConfig();
+
   // Session Data
   const { data: session } = useSession();
   /* @ts-ignore */
@@ -36,7 +38,7 @@ function Form({ getLinks, setShowModal }: FormType) {
         }),
       });
       if (responce.ok) {
-        getLinks();
+        mutate("/api/link");
       }
     } catch (error) {
       console.log("there was an error submitting", error);
