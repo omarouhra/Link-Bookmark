@@ -109,6 +109,7 @@ export default function Home() {
             </p>
           )}
         </div>
+
         <div className='flex flex-col  justify-start space-y-8 md:space-y-0 md:flex-row  md:justify-between w-full md:items-center '>
           <div className=' relative border border-gray-200 rounded-lg flex flex-start items-center'>
             <span className='pl-5 pr-1'>🔍</span>
@@ -148,7 +149,9 @@ export default function Home() {
 
           <Button
             label={
-              userSearchLinks.length != 0 ? "Your Links ➡️" : "Create Links 🔥"
+              userSearchLinks.length != 0
+                ? "Back to your Links 🚀"
+                : "Create Links 🔥"
             }
             onclick={() => {
               userSearchLinks.length != 0
